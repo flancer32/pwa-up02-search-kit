@@ -40,7 +40,7 @@
             </div>
             <ais-hits>
               <template v-slot:item="{ item }">
-                <article>
+                <article class="fixQuasarDefaults">
                   <h1>
                     <ais-highlight attribute="title" :hit="item" />
                   </h1>
@@ -186,5 +186,25 @@ em {
 .pagination {
   margin: 2rem auto;
   text-align: center;
+}
+
+/* override Quasar defaults */
+.header P {
+  /* p { margin: 0 0 16px; } from 'quasar.css' */
+  margin: 0;
+}
+
+.fixQuasarDefaults H1 {
+  /* see h1 from 'quasar.css' */
+  /*h1 {*/
+  /*  font-size: 6rem;*/
+  /*  font-weight: 300;*/
+  /*  line-height: 6rem;*/
+  /*  letter-spacing: -0.01562em;*/
+  /*}*/
+  font-size: 21px;
+  font-weight: 700;
+  line-height: 20px;
+  letter-spacing: normal;
 }
 </style>
