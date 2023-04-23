@@ -14,9 +14,12 @@
   },
   "dependencies": {
     "@quasar/extras": "^1.0.0",
+    "@searchkit/instantsearch-client": "latest",
     "core-js": "^3.6.5",
     "quasar": "^2.6.0",
+    "searchkit": "latest",
     "vue": "^3.0.0",
+    "vue-instantsearch": "4.4.2",
     "vue-router": "^4.0.0"
   },
   "devDependencies": {
