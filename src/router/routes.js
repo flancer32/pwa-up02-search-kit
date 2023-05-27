@@ -7,7 +7,7 @@ const routes = [
     ]
   },
   {
-    path: "/searchkit",
+    path: "/shop/:shopId?/:type?/:actors?/:pathMatch(.*)*",
     component: () => import("layouts/BlankLayout.vue"),
     children: [
       { path: "", component: () => import("pages/SearchKit.vue") }

@@ -19,6 +19,7 @@
       <ais-instant-search
         :search-client="searchClient"
         index-name="imdb_movies"
+        :routing="routing"
       >
         <ais-configure :hits-per-page.camel="8" />
         <div class="search-panel">
@@ -65,6 +66,10 @@
 
 import Client from "@searchkit/instantsearch-client";
 import Searchkit from "searchkit";
+import { history as historyRouter } from "instantsearch.js/es/lib/routers";
+import { singleIndex as singleIndexMapping } from "instantsearch.js/es/lib/stateMappings";
+
+const INDEX = "imdb_movies"; // name of the index used in the search
 
 const config = {
   connection: {
@@ -105,11 +110,52 @@ const config = {
 const searchkitClient = new Searchkit(config);
 const searchClient = Client(searchkitClient);
 
-export default {
-  data() {
+/**
+ * Convert actor name from "al-pacino" to "Al Pacino".
+ * @param {string} param
+ * @return {string}
+ */
+function decodeActor(param) {
+  const words = param.split("-");
+  const capitalized = words.map((word) => word.charAt(0).toUpperCase() + word.slice(1));
+  return capitalized.join(" ");
+}
 
+export default {
+  /**
+   * @param {Object} inst current instance of this Vue Component
+   * @return {Object}
+   */
+  data(inst) {
     return {
-      searchClient
+      searchClient,
+      routing: {
+        router: historyRouter(),
+        // this object must contain two props: stateToRoute & routeToState
+        stateMapping: (() => {
+          // get 'singleIndexMapping' as a base for stateMapping object
+          const res = singleIndexMapping("instant_search");
+          // TODO: you can straighten this code and remove this wrapper
+          const origSTR = res.stateToRoute;
+          res.stateToRoute = (uiState) => {
+            console.log(`STR: ${JSON.stringify(uiState)}`);
+            return origSTR(uiState);
+          };
+          // I replace `routeToState` with own code
+          res.routeToState = (routeState) => {
+            const res = { [INDEX]: { "refinementList": {} } };
+            const params = inst.$route.params;
+            if (params?.type)
+              res[INDEX].refinementList.type = [params.type];
+            if (params?.actors) {
+              const actor = decodeActor(params.actors);
+              res[INDEX].refinementList.actors = [actor];
+            }
+            return res;
+          };
+          return res;
+        })()
+      }
     };
   }
 };

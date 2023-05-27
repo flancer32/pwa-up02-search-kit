@@ -5,7 +5,7 @@
       src="~assets/quasar-logo-vertical.svg"
       style="width: 200px; height: 200px"
     >
-    <q-btn style="margin-top: 20px;" color="primary" to="/searchKit">Search Kit</q-btn>
+    <q-btn style="margin-top: 20px;" color="primary" to="/shop">Search Kit</q-btn>
   </q-page>
 </template>
 
